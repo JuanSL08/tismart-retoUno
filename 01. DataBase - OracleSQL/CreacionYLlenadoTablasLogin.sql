@@ -25,3 +25,7 @@ select * from usuarios;
 insert into perfiles(id, perfil) values(1, 'ADMINISTRADOR');
 insert into perfiles(id, perfil) values(2, 'SUPERVISOR');
 select * from perfiles;
+
+insert into usuarioperfil(idUsuario, idPerfil) values(1, 1);
+insert into usuarioperfil(idUsuario, idPerfil) values(2, 2);
+select * from usuarioperfil;
