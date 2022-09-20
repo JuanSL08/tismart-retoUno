@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+	<title>Hospitales</title>
+
+	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<!-- Custom styles for this template -->
+	<link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+	<link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+	<link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+
+ </head>
+ <body>
+ 	<header th:insert="fragments/menu :: menu-principal">
+    </header>
+ 
+	<main role="main">     
+	  <h6></h6>
+	  <div class="container col-md-4"> 
+        <div class="card">
+          <h5 class="card-header text-center"><strong>Búsqueda de Hospitales</strong></h5>              
+          <div class="card-body">
+            
+            <form class="form-inline" th:action="@{/hospital/search}" method="get" th:object="${search}">
+	          <table class="table table-striped">
+	          
+                <tr align="center">
+                  <td style="vertical-align:middle;">	
+                  	<input onclick="document.getElementById('nombre').disabled = false; document.getElementById('selectSede').disabled = true;" type="radio" name="type" checked="checked">
+                  	  &nbsp;
+                  	  <a>Hospital:</a>
+                  </td>
+                  
+                  <td style="vertical-align:middle;">
+				  	<input type="text" class="form-control" th:field="*{nombre}" name="nombre" id="nombre" placeholder="Escriba una búsqueda">
+				  </td>
+                </tr>
+                <tr align="center">
+                  <td style="vertical-align:middle;">
+                  	<input onclick="document.getElementById('nombre').disabled = true; document.getElementById('selectSede').disabled = false;" type="radio" name="type" value="customurl">
+                  	&nbsp;&nbsp;
+                  	<a>Sede:</a>
+                  </td>
+                                    <td style="vertical-align:middle;">
+				    <select th:field="*{sede.idSede}" class="custom-select custom-select" name="selectSede" id="selectSede" disabled="disabled">
+		              <option th:value="${null}" selected>Seleccione una sede</option>
+		              <option th:each="sede : ${sedes}" 
+		             			th:value="${sede.idSede}" th:text="${sede.descSede}"></option>
+		            </select>
+				  </td>
+                </tr>
+                <tr align="center">
+                  <td colspan="2" style="vertical-align:middle;">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                  </td>
+                </tr>
+              </table>
+	        </form>
+          </div>
+        </div>
+      </div>
+	  
+      <p></p>
+      
+      <div class="container-field"> 
+
+        <div class="card">
+          <h4 class="card-header text-center"><strong>Listado de Hospitales</strong></h4>    
+          <div th:if="${msg != null}" class='alert alert-success' th:text="${msg}" role='alert'></div>          
+          <div class="card-body">
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Antigüedad</th>
+                  <th scope="col">Area</th>
+                  <th scope="col">Fecha de Registro</th>
+                  <th scope="col">Perteneciente al Distrito</th>
+                  <th scope="col">Provincia</th>
+                  <th scope="col">Gerente</th>
+                  <th scope="col">Sede</th>
+                  <th scope="col">Condicion</th>
+                  <th scope="col" sec:authorize="hasAnyAuthority('ADMINISTRADOR')">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="hospital : ${hospitales}">
+                  <td th:text="${hospital.idHospital}"></td>
+                  <td th:text="${hospital.nombre}"></td>
+                  <td th:text="${hospital.antiguedad} + ' años'"></td>
+                  <td th:text="${hospital.area + ' m2'}"></td>
+                  <td th:text="${#dates.format(hospital.fechaRegistro, 'dd-MM-yyyy')}"></td>
+                  <td th:text="${hospital.distrito.descDistrito}"></td>
+                  <td th:text="${hospital.distrito.provincia.descProvincia}"></td>
+                  <td th:text="${hospital.gerente.descGerente}"></td>
+                  <td th:text="${hospital.sede.descSede}"></td>
+                  <td th:text="${hospital.condicion.descCondicion}"></td>
+                  <td sec:authorize="hasAnyAuthority('ADMINISTRADOR')">
+                    <a th:href="@{/hospital/delete/{id} (id=${hospital.idHospital}) }" onclick='return confirm("¿Desea eliminar el registro?")'
+                    	class="btn btn-danger btn-sm" role="button" title="Eliminar el registro.">
+                      <i class="fas fa-trash" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                </tr>                               
+              </tbody>
+            </table>
+            <p class="text-center" th:text="'Se encontraron '+${listaSize}+' Hospital(es)'"/>
+          </div>
+        </div>
+      </div> <!-- /container -->
+
+    </main>
+	
+	<footer class="footer" sec:authorize="hasAnyAuthority('ADMINISTRADOR')">    
+	  <div class="container text-center">
+		<div class="row">
+	      <div class="col">
+	      </div>
+	      <div class="col">
+	        <a class="btn btn-secondary" th:href="@{/}">Regresar</a>
+	      </div>
+	      <div class="col">
+	        <a class="btn btn-secondary" th:href="@{/hospital/create}">Agregar</a>
+	      </div>
+	      <div class="col">
+	        <a class="btn btn-secondary" th:href="@{/hospital/edit}">Modificar</a>
+	      </div>
+	      <div class="col">
+	      </div>
+	    </div>
+	  </div>
+    </footer>
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script th:src="@{bootstrap/js/bootstrap.min.js}"></script>
+  </body>
+</html>

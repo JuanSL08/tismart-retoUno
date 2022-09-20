@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="favicon.ico">
+	<title>HospitalesApp</title>
+	
+	<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{/bootstrap/css/jumbotron.css}" rel="stylesheet">
+	<link th:href="@{/bootstrap/css/sticky-footer-navbar.css}" rel="stylesheet">
+	<link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+  </head>
+
+  <body>
+	<header th:insert="fragments/menu :: menu-principal">
+    </header>
+ 
+	<main role="main">     
+      <hr>
+      <div class="container col-md-5"> 
+        <div class="card">
+          <h4 class="card-header"><strong>Menú Principal</strong></h4>              
+          <div class="card-body">
+            
+            <table class="table table-warning table-striped">
+              <tr align="center">
+                <th colspan="2" style="vertical-align:middle; font-size: 28px;"><a>Hospital</a></th>
+              </tr>
+              <tr align="center">
+                <th class="col-md-2" style="vertical-align:middle;" sec:authorize="hasAnyAuthority('SUPERVISOR','ADMINISTRADOR')">
+                  <a th:href="@{/hospital}">Buscar</a></th>
+                <th class="col-md-3" rowspan="4">
+				  <img class="rounded mx-auto d-block" src="images/logotismart.jpg" alt="" width="165" height="170">
+				</th>
+              </tr>
+              <tr align="center" sec:authorize="hasAnyAuthority('ADMINISTRADOR')">
+                <th style="vertical-align:middle;"><a th:href="@{/hospital/create}">Agregar</a></th>
+              </tr>
+              <tr align="center" sec:authorize="hasAnyAuthority('ADMINISTRADOR')">
+                <th style="vertical-align:middle;"><a th:href="@{/hospital/edit}">Modificar</a></th>
+              </tr>
+              <tr align="center" sec:authorize="hasAnyAuthority('ADMINISTRADOR')">
+                <th style="vertical-align:middle;"><a th:href="@{/hospital/delete}">Eliminar</a></th>
+              </tr>
+            </table>
+            
+          </div>
+        </div>
+      </div> <!-- /container -->
+
+    </main>
+	
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script th:src="@{bootstrap/js/bootstrap.min.js}"></script>
+  </body>
+</html>
